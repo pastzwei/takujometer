@@ -1,6 +1,6 @@
 /*  voltmeter_SD by K.Sakurai 20180714
  *  あちゃんでいいの使用デバイスで電圧を測定してSDカードに記録するデータロガーです。
- *  使用ライブラリは Wire(I2C), SD, Adafruit_GFX, Adafruit_SSD1306
+ *  使用ライブラリは Wire(I2C), SD, Adafruit_GFX, Adafruit_SSD1306 ina226
  *  Wireはプログラム中一回も使ってないように見えるけどたぶんAdafruit_SSD1306で使ってるから抜かないで。
  */
  
