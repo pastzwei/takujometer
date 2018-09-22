@@ -1,7 +1,7 @@
-/*  voltmeter_SD by K.Sakurai 20180714
- *  あちゃんでいいの使用デバイスで電圧を測定してSDカードに記録するデータロガーです。
+/*  wattmeter_SD_withINA226 by K.Sakurai 20180922 ver.1.0
+ *  あちゃんでいいの使用デバイスでINA226から電流・電圧をとってSDカードに記録するプログラムです。
+ *  VCC=3.6V, f=8mHz
  *  使用ライブラリは Wire(I2C), SD, Adafruit_GFX, Adafruit_SSD1306 ina226
- *  Wireはプログラム中一回も使ってないように見えるけどたぶんAdafruit_SSD1306で使ってるから抜かないで。
  */
  
 #include <Adafruit_GFX.h>
