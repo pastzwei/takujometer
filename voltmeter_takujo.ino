@@ -2,7 +2,6 @@
  *  あちゃんでいいの3.3V8MHz使用。INA226で測定した電流・電圧・電力をSDに記録するプログラムです。
  *  使用ライブラリは Wire(I2C), SD, INA226
  */
-
 #include <Wire.h>
 
 #include <SD.h>
@@ -15,7 +14,7 @@ const int MEASURE_3RD = 2;    //A2ピン@1A
 const int CLIPPING = 2;       //D2ピン@測定限界
 
 //=====【Software Configration】測定の仕様を変えたければ以下を変更すること
-const int ABSOLUTE_MAX = 1.5  //定格電流1.5A
+const int ABSOLUTE_MAX = 1.5;  //定格電流1.5A
 const int NUMDET = 100;   //1つのデータにつき測定回数は100回
 const int INTERVAL = 30;  //測定インターバルは30ms
 const int WAIT_TIME = 5000; //データ取得間隔は5000ms 処理時間は実測200ms程度なので、300ms以下NG
