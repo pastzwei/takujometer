@@ -2,16 +2,18 @@
  *  あちゃんでいいの3.3V8MHz使用。INA226で測定した電流・電圧・電力をSDに記録するプログラムです。
  *  使用ライブラリは Wire(I2C), SD, INA226
  */
-#include <Wire.h>
+ 
+#include <INA226.h>
 
+#include <Wire.h>
 #include <SD.h>
 
 //=====【Hardware Configration】ハードウェアに応じて以下を変更すること
 const int chipSelect = 10;    //SDピンアサイン CSは10
-const int MEASURE_1ST = 0;    //A0ピン@10mA
-const int MEASURE_2ND = 1;    //A1ピン@100mA
-const int MEASURE_3RD = 2;    //A2ピン@1A
-const int CLIPPING = 2;       //D2ピン@測定限界
+const int MEASURE_1ST = 3;    //D3ピン@10mV
+const int MEASURE_2ND = 5;    //D5ピン@100mV
+const int MEASURE_3RD = 6;    //D6ピン@1V
+const int CLIPPING = 4;       //D4ピン@測定限界
 
 //=====【Software Configration】測定の仕様を変えたければ以下を変更すること
 const int ABSOLUTE_MAX = 1.5;  //定格電流1.5A
@@ -21,7 +23,9 @@ const int WAIT_TIME = 5000; //データ取得間隔は5000ms 処理時間は実�
 
 //=====
 
-int number;
+INA226 ina;
+
+int cnt;
 
 void setup()
 {                
@@ -35,38 +39,55 @@ void setup()
     return;
   }
 
+  //INA226のセットアップ
+  ina.begin();
+  ina.configure(INA226_AVERAGES_1, INA226_BUS_CONV_TIME_1100US, INA226_SHUNT_CONV_TIME_1100US, INA226_MODE_SHUNT_BUS_CONT);
+  ina.calibrate(0.002, 1.5);  //シャント抵抗は0.002Ω、定格は1.5Aとします
+
   //データの通し番号初期化
-  number = 0;
+  cnt = 0;
 }
 
 void loop()
 {
   int i;
-  double val;
+  double current;
   double voltage;
+  double watt;
   unsigned long time_zero;
 
-  //開始時刻を格納・valの初期化
-
+  //V,Aリセット＋開始時刻を格納
+  voltage = 0;
+  current = 0;
+  watt = 0;
   time_zero = millis();
-  val = 0;
 
   //A0から取得して電圧を求めるのを規定回数繰り返す valの中身は回数分の測定値の総和になる
   for(i = 0; i < NUMDET; i++)
   {
-    voltage = (double) analogRead(analogPin) * VCC / 1024 * (MULTI_HIGH + MULTI_LOW) / MULTI_LOW * 2;
-    val += voltage;
+    voltage += ina.readBusVoltage();
+    current += ina.readShuntCurrent();
+    watt += ina.readBusPower();
     delay(INTERVAL);
   }
-
   //平均値を導出 valの中身は平均値になる
-  val = val / NUMDET;  
+  voltage = voltage / 100;
+  current = current / 100;
+  watt = watt / 100;
+
+  //LEDによる表示を行う
   
+
   //SDに書き込む文字列つくる
   String dataString = "";
-  dataString += String(number);
+  dataString += String(cnt);
   dataString += ",";
-  dataString += String(val);
+  dataString += String(voltage);
+  dataString += ",";
+  dataString += String(current);
+  dataString += ",";
+  dataString += String(watt);
+  
   
   //SDカードに書き込む。ダメならLEDが点灯する。
   File dataFile = SD.open("measure.csv", FILE_WRITE);
@@ -83,7 +104,7 @@ void loop()
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
   delay(100);                       // wait for a second
   digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  number++;
+  cnt++;
 
   //WAIT_TIMEまで待機
   while(millis() < time_zero + WAIT_TIME)
