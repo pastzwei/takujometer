@@ -1,15 +1,9 @@
-/*  voltmeter_SD by K.Sakurai 20180714
+/*  voltmeter_takujo by K.Sakurai 20180714
  *  あちゃんでいいの使用デバイスで電圧を測定してSDカードに記録するデータロガーです。
  *  使用ライブラリは Wire(I2C), SD, Adafruit_GFX, Adafruit_SSD1306
  *  Wireはプログラム中一回も使ってないように見えるけどたぶんAdafruit_SSD1306で使ってるから抜かないで。
  */
- 
-#include <Adafruit_GFX.h>
-#include <Adafruit_SPITFT.h>
-#include <Adafruit_SPITFT_Macros.h>
-#include <gfxfont.h>
 
-#include <Adafruit_SSD1306.h>
 
 #include <Wire.h>
 
@@ -24,12 +18,10 @@ const int MULTI_LOW = 100;    //倍率器の抵抗GND側 high/lowがあってれ
 
 //=====【Software Configration】測定の仕様を変えたければ以下を変更すること
 const int NUMDET = 100;   //1つのデータにつき測定回数は100回
-const int INTERVAL = 30;  //測定間隔は30ms
+const int INTERVAL = 30;  //測定インターバルは30ms
 const int WAIT_TIME = 5000; //データ取得間隔は5000ms 処理時間は実測200ms程度なので、300ms以下NG
 
 //=====
-
-Adafruit_SSD1306 display(-1);
 
 int number;
 
@@ -44,10 +36,6 @@ void setup()
     // don't do anything more:
     return;
   }
-
-  //OLED初期化
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // aitendoで売ってるOLEDデバイスの I2Cアドレスは0x3C
-  display.clearDisplay();
 
   //データの通し番号初期化
   number = 0;
@@ -76,17 +64,6 @@ void loop()
   //平均値を導出 valの中身は平均値になる
   val = val / NUMDET;  
   
-  //valをOLEDに出力
-  display.clearDisplay();
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
-  display.setCursor(0,0);
-  display.println("KiDenRyoku");
-  display.setTextSize(2);
-  display.print(val, 2);
-  display.println("V");
-  display.display();
-
   //SDに書き込む文字列つくる
   String dataString = "";
   dataString += String(number);
