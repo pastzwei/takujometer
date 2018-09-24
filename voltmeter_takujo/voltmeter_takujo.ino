@@ -10,9 +10,7 @@
 //=====【Hardware Configration】ハードウェアに応じて以下を変更すること
 const int chipSelect = 10;    //SDピンアサイン CSは10
 const int analogPin = 0;    //アナログピンの番号 A0つかいます
-const float VCC = 3.3;    //Vccは3.3のデバイスを使用
-const int MULTI_HIGH = 390;    //倍率器の抵抗Vcc側
-const int MULTI_LOW = 100;    //倍率器の抵抗GND側 high/lowがあってればOK
+
 
 //=====【Software Configration】測定の仕様を変えたければ以下を変更すること
 const int NUMDET = 100;   //1つのデータにつき測定回数は100回
