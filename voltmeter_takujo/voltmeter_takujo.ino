@@ -1,9 +1,7 @@
-/*  voltmeter_takujo by K.Sakurai 20180714
- *  あちゃんでいいの使用デバイスで電圧を測定してSDカードに記録するデータロガーです。
- *  使用ライブラリは Wire(I2C), SD, Adafruit_GFX, Adafruit_SSD1306
- *  Wireはプログラム中一回も使ってないように見えるけどたぶんAdafruit_SSD1306で使ってるから抜かないで。
+/*  voltmeter_takujo by K.Sakurai 20180924
+ *  あちゃんでいいの3.3V8MHz使用。INA226で測定した電流・電圧・電力をSDに記録するプログラムです。
+ *  使用ライブラリは Wire(I2C), SD, INA226
  */
-
 
 #include <Wire.h>
 
