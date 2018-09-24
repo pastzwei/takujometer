@@ -9,8 +9,11 @@
 
 //=====【Hardware Configration】ハードウェアに応じて以下を変更すること
 const int chipSelect = 10;    //SDピンアサイン CSは10
-const int analogPin = 0;    //アナログピンの番号 A0つかいます
-
+const int MEASURE_1ST = 0;    //A0ピン@10mA
+const int MEASURE_2ND = 1;    //A1ピン@100mA
+const int MEASURE_3RD = 2;    //A2ピン@1A
+const int MEASURE_4th = 3;    //A3ピン@10A
+const int CLIPPING = 2;       //D2ピン@測定限界
 
 //=====【Software Configration】測定の仕様を変えたければ以下を変更すること
 const int NUMDET = 100;   //1つのデータにつき測定回数は100回
